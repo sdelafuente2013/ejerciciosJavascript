@@ -201,3 +201,28 @@ window.addEventListener('DOMContentLoaded', () => {
 input.addEventListener('change', (e) => {
     console.log(e.target.value)
 })
+
+// // 1) capturamos mediante querySelector
+// const button = document.querySelector('button');
+
+// // 2) realizar el evento para ese boton
+
+// button.addEventListener('click', (e) => {
+//     console.log(e.target) // 'equivalente' al this
+// })
+
+// button.addEventListener('click', function () {
+//     console.log(this)
+// })
+
+
+// 1) capturamos el elemento de HTML
+const titulo = document.querySelector('h1')
+
+// 2) Aplicamos el evento que necesitemos
+titulo.addEventListener('click', () => {
+// 3) damos la accion que queremos
+    // alert('Hola mundo')
+    // console.log(e.target.innerText)
+    
+})

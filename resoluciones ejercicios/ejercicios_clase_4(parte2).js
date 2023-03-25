@@ -10,7 +10,11 @@ const misMascotas = {
 // 2) --------------------------------------------------------------
 misMascotas.presentar = function() {
     return `Hola, mi mascota se llama ${this.nombre}, es un(a) ${this.especie} y tiene ${this.edad} años`;
-}    
+}
+
+misMascotas.presentar2 = () => `Hola, mi mascota se llama ${misMascotas.nombre}, es un(a) ${misMascotas.especie} y tiene ${misMascotas.edad} años`;
+
+
 console.log(misMascotas.presentar()); // Hola, mi mascota se llama Luna, es un(a) gato y tiene 3 años.
 
 // 3) --------------------------------------------------------------
