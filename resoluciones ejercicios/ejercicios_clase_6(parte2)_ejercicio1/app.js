@@ -1,21 +1,27 @@
-'use strict';
+"use strict";
 
-window.addEventListener('DOMContentLoaded', function() {
-    const endpointTrending = `https://api.giphy.com/v1/gifs/trending?api_key=UsVO5dlZNBAu1lCzqABNN3M8egPwn4in&limit=10&rating=g`
+window.addEventListener("DOMContentLoaded", function () {
+  // Endpoint para obtener los GIFs
+  const endpointTrending = `https://api.giphy.com/v1/gifs/trending?api_key=UsVO5dlZNBAu1lCzqABNN3M8egPwn4in&limit=10&rating=g`;
 
-    fetch(endpointTrending)
-        .then(function(response) {
-            return response.json();
-        })
-        .then(function(data) {
-            const results = data.data
-            console.log(results)
+  // Obtener los GIFs
+  fetch(endpointTrending)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      // Guardo los resultados en una variable
+      const results = data.data;
 
-            const gifsList = document.querySelector('.gifsList');
-            let gifs = '';
+      // Obtengo el elemento donde voy a mostrar los GIFs
+      const gifsList = document.querySelector(".gifsList");
 
-            data.data.forEach(function(gif) {
-                gifs += `
+      // Creo una variable para guardar el HTML de los GIFs
+      let gifs = "";
+
+      // Recorro los resultados y voy agregando el HTML de cada GIF
+      results.forEach(function (gif) {
+        gifs += `
                     <article>
                         <img src="${gif.images.original.url}" alt="${gif.name}">
                         <p>Name: ${gif.title}</p>
@@ -23,26 +29,59 @@ window.addEventListener('DOMContentLoaded', function() {
                         <a href="${gif.id}">Agregar a favoritos</a>
                     </article>
                 `;
-            });
+      });
 
-            gifsList.innerHTML = gifs;
+      // Agrego el HTML de los GIFs al elemento
+      gifsList.innerHTML = gifs;
 
-            const links = document.querySelectorAll('a');
-            links.forEach(function(link) {
-                link.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    const id = event.target.href.split('/').pop();
-                    // console.log(id);
-                    // guardar en localStorage
-                    localStorage.setItem('favoritos', id);
-                })
-            })
+      // ---- Agregar los GIFs a favoritos -----
 
-            // capturar todos los link y guardar en localStorage los id de los gifs que se clickean
-            
+      // Seleccionar todos los links
+      const links = document.querySelectorAll("section a");
 
-        })
-        .catch(function(error) {
-            console.log(error);
-        })
+      // Recorrer los links y agregar un evento click
+      links.forEach(function (link) {
+        link.addEventListener("click", function (event) {
+          // Prevenir el comportamiento por defecto del link
+          event.preventDefault();
+
+          // Obtener el ID del GIF
+          const id = event.target.href.split("/").pop();
+
+          // Recuperar el valor actual de 'favoritos' en localStorage y convertirlo a un array
+          let favorites = JSON.parse(localStorage.getItem("favoritos")) || [];
+
+          // Verificar si el ID ya está en el array, si no está, agregarlo
+          if (!favorites.includes(id)) {
+            favorites.push(id);
+          }
+
+          // Guardar el array actualizado en localStorage
+          localStorage.setItem("favoritos", JSON.stringify(favorites));
+        });
+      });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+  // Logout para eliminar el usuario del sessionStorage
+  document.querySelector("#logoutLink").addEventListener("click", () => {
+    // Eliminar el usuario del sessionStorage
+    sessionStorage.removeItem("usuario");
+
+    // Recargar la página
+    location.reload();
+  });
+
+  // Verificar si hay un usuario en el sessionStorage
+  if (sessionStorage.getItem("usuario")) {
+    // Si hay un usuario, ocultar el link de login y mostrar el de logout
+    document.querySelector("#loginLink").style.display = "none";
+    document.querySelector("#logoutLink").style.display = "";
+  } else {
+    // Si no hay un usuario, ocultar el link de logout y mostrar el de login
+    document.querySelector("#loginLink").style.display = "";
+    document.querySelector("#logoutLink").style.display = "none";
+  }
 });
